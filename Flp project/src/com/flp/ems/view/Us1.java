@@ -40,7 +40,7 @@ public class Us1 {
 		System.out.println("Enter date of birth");
 		DOB=sc.next();
 		a=Validate.isvalidname(Name);
-		b=Validate.isvalidEmail(Email_Id);
+	//	b=Validate.isvalidEmail(Email_Id);
 		c=Validate.isvalidPhone(Phone_No);
 	//	d=Validate.is(DOJ,"dd/MM/yyyy");
 	  if(a&&b&&c)

@@ -1,80 +1,173 @@
 package com.flp.ems.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.flp.ems.dao.EmployeeDaoImplForList;
+import com.flp.ems.dao.IemployeeDao;
+import com.flp.ems.domain.Department;
 import com.flp.ems.domain.Employee;
+import com.flp.ems.domain.Project;
+import com.flp.ems.domain.Role;
 import com.flp.ems.util.Validate;
+import com.flp.ems.view.BootClass;
 import com.flp.ems.view.UserInteraction;
 
 public class EmployeeServiceImpl implements IEmployeeService {
-
-	Employee e = new Employee();
 	EmployeeDaoImplForList edmp=new EmployeeDaoImplForList();
 
-	static String name;
+	//EmployeeDao edmp = new EmployeeDaoImplForList();
+	// EmployeeServiceImpl eservice=new EmployeeServiceImpl();
+
+	private static String name;
+	private static String type;
+	private static int ch = 0;
+	private static Scanner scan = new Scanner(System.in);
+
 	static UserInteraction uii = new UserInteraction();
-	// static HashMap<String, String> gethash=UserInteraction.getHashmap();
 
-	/*
-	 * private static void validate1() { // TODO Auto-generated method stub
-	 * Validate.isvalidname(name); }
-	 */
+	static Set<Integer> hashkin=new HashSet<Integer>();
+	static Set<String>  hashem=new HashSet<String>();
 
-	@Override
+@Override
 	public void AddEmployee(HashMap mapStudent) {
-
+		Employee e = new Employee();
+		Department d=new Department();
+		Project pro=new Project();
+		Role role=new Role();
+		
+		int val=(int)mapStudent.get("Kinid");
+		int eid=(int)mapStudent.get("Employeeid");
+		String emls=(String)mapStudent.get("Emailid");
+		String dobs=(String)mapStudent.get("DOB");
+		String dojs=(String)mapStudent.get("DOJ");
+		String depts=(String)mapStudent.get("Dept");
+		String projs=(String)mapStudent.get("Project");
+	//	Employee e1=new Employee();
 		/*
 		 * if(mapStudent.get("Name")==" ") { System.out.println(
 		 * "invalid null name");
 		 * 
 		 * }
 		 */
-		boolean f1, f2, f3;
+		boolean f1, f2, f3,flag=false;
 
-		//f3 = Validate.isvalidEmail((String) mapStudent.get("Emailid"));
+		// f3 = Validate.isvalidEmail((String) mapStudent.get("Emailid"));
 		f1 = Validate.isvalidname((String) mapStudent.get("Name"));
 		f2 = Validate.isvalidPhone((String) mapStudent.get("Phone"));
-		if (f1 && f2) {
-			System.out.println("valid details(Name,Phone)");
+		 f3 = Validate.isvalidEmail((String) mapStudent.get("Emailid"));
+		 
+		if (f1 && f2 && f3) {
+			System.out.println("valid details(Name,Phone,Email_id)");
+			
 		} else {
-			System.out.println("invalid name");
-			// System.exit(0);
+			System.out.println("invalid details plz check (name,phone,email)");
+			
+			 BootClass.menuSelection();
 		}
-		// Validate.isvalidname((String)mapStudent.get("Name"));
-
+		if(hashkin.contains(val))
+		{
+			System.out.println("same kin_Id found");
+			System.out.println(hashkin);
+			return;
+		}else
+		{
+			System.out.println("plz add more records..");
+			hashkin.add(val);
+		//	System.out.println(hashkin);
+			//hashkin.add(e.setKin_Id((int)mapStudent.get("Kinid")));
+		}
+		if(hashem.contains(emls))
+		{
+			System.out.println("same email id found");
+			return;
+		}
+		else
+		{
+			hashem.add(emls);
+			System.out.println(hashem);
+		}
+		
+		
+		e.setEmployee_Id((int)mapStudent.get("Employeeid"));
+		e.setKin_Id((int) mapStudent.get("Kinid"));
 		e.setName((String) mapStudent.get("Name"));
 		e.setPhone_No((String) mapStudent.get("Phone"));
+		
+		e.setEmail_Id((String) mapStudent.get("Emailid"));
 
-		/*e.setEmail_Id((String) mapStudent.get("Emailid"));*/
+		e.setDOB((String) mapStudent.get("DOB"));
+		e.setDOJ((String) mapStudent.get("DOJ"));
+		e.setDepartment_Id((String) mapStudent.get("Dept"));
+		e.setProject_Id((String) mapStudent.get("Project"));
+		e.setRoles_Id((String) mapStudent.get("Role"));
+
+	/*	
+		d.setDepartmentname((String)mapStudent.get("Dept"));
+		pro.setProj_id((String)mapStudent.get("Project"));
+		role.setRole_name((String)mapStudent.get("Role"));*/
+		
+		
 		System.out.println(e.toString());
-		edmp.AddEmployee(e);
+		/*System.out.println(d.toString());
+		System.out.println(role.toString());*/
+	
+		
+		//hash.add(e.setKin_Id((int)mapStudent.get("Employeeid"));
+		//hash.add(e1.setKin_Id((int)mapStudent.get(""));
+		
+	 edmp.AddEmployee(e);
+	 
 
 	}
 
+	
+
+	
+
+
+
 	@Override
-	public void ModifyEmployee() {
+	public void ModifyEmployee(Map omap, String name,String email,int kinid,int id) {
+
+		edmp.ModifyEmployee(omap, name,email,kinid,id);
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void RemoveEmployee() {
+	public boolean RemoveEmployee(int kinid) {
 
-		// TODO Auto-generated method stub
+		// String opt;
+		return edmp.RemoveEmployee(kinid);
+		
+	}
+
+	public Employee SearchEmployee(String name,String email,int  kinid) {
+
+		return edmp.SearchEmployee(name,email,kinid);
 
 	}
 
 	@Override
-	public void SearchEmployee() {
-		// TODO Auto-generated method stub
+	public
+	void  getAllEmployee() {
+		/*hs.addAll(employees);
+		employees.clear();
+		employees.addAll(hs);*/
+		
+		
+		edmp.getAllEmployee();
+		//return edmp.getAllEmployee();
 
 	}
 
-	@Override
-	public void getAllEmployee() {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 }
