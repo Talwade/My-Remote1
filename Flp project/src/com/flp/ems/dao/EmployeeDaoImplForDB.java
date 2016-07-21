@@ -38,8 +38,8 @@ public class EmployeeDaoImplForDB implements IemployeeDao{
 
 	
 	
-}
-*/package com.flp.ems.dao;
+}*/
+package com.flp.ems.dao;
 
 import java.util.Map;
 import java.sql.*;
@@ -65,59 +65,71 @@ public class EmployeeDaoImplForDB implements IemployeeDao {
 	String driver = "com.mysql.jdbc.Driver";
 	String url = "jdbc:mysql://localhost:3306/test";
 	private String s;
-	
-
-	
 
 	@Override
-	public void getAllEmployee() {
+	public void getAllEmployee() throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		 Class.forName(driver); Connection dbConnection;
-		 dbConnection=(Connection)DriverManager.getConnection(url);
-		 Statement stmt = dbConnection.createStatement();
-		    ResultSet rs = stmt.executeQuery("select * from Employee");
-		    while (rs.next()) {
-		    	 s = rs.getString(""); 
-		      
-		         System.out.println(s);
-		       
-		    }
+		Class.forName(driver);
+		Connection dbConnection;
+		dbConnection = (Connection) DriverManager.getConnection(url);
+		Statement stmt = dbConnection.createStatement();
+		ResultSet rs = stmt.executeQuery("select * from Employee");
+		while (rs.next()) {
+			s = rs.getString("");
+
+			System.out.println(s);
+
+		}
 	}
 
 	@Override
-	public boolean RemoveEmployee(int id, Employee e){
+	public boolean RemoveEmployee(int id, Employee e) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		
-		 Class.forName(driver); Connection dbConnection;
-		 dbConnection=(Connection)DriverManager.getConnection(url);
-		 String query = "delete from Employee where name=?";
+
+		Class.forName(driver);
+		Connection dbConnection;
+		dbConnection = (Connection) DriverManager.getConnection(url);
+		String query = "delete from Employee where NAME=?";
 		PreparedStatement preparedStmt = dbConnection.prepareStatement(query);
 		preparedStmt.setInt(1, e.setKin_Id(id));
 		preparedStmt.execute();
-		 
-		 
 
 		return false;
 	}
 
-	
-	
-
 	public EmployeeDaoImplForDB() {
-		this.e=e;
-		this.names=Name;
+		this.e = e;
+		this.names = Name;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public Employee SearchEmployee(String val, String val1, int val2) {
-		// TODO Auto-generated method stub
-		
+	public Employee SearchEmployee(String val, String val1, int val2) throws ClassNotFoundException, SQLException {
+
+		Class.forName(driver);
+		Connection connection;
+		connection = (Connection) DriverManager.getConnection(url);
+		Statement stmt = connection.createStatement();
+		String query[] = { "SELECT * FROM EMPLOYEE where KIN=?", "select name from EMPLOYEE where name like '?'",
+				"select name from EMPLOYEE where name like '?'" };
+		for (String q : query) {
+			ResultSet rs = stmt.executeQuery(q);
+			System.out.println("Names for query " + q + " are");
+			while (rs.next()) {
+				String name = rs.getString("NAME");
+				System.out.print(name + "  ");
+			}
+
+			// TODO Auto-generated method stub
+		}
 		return null;
 	}
 
 	@Override
-	public Employee ModifyEmployee(Map empModifiedDetails, String val, String val1, int empId, int val2){ //throws ClassNotFoundException, SQLException {
+	public Employee ModifyEmployee(Map empModifiedDetails, String val, String val1, int empId, int val2)
+			throws ClassNotFoundException, SQLException { // throws
+															// ClassNotFoundException,
+															// SQLException {
 		// TODO Auto-generated method stub
 		Class.forName(driver);
 		Connection dbConnection;
@@ -126,22 +138,20 @@ public class EmployeeDaoImplForDB implements IemployeeDao {
 		PreparedStatement preparedStmt = dbConnection.prepareStatement(query);
 		preparedStmt.setString(1, e.getName());
 		preparedStmt.execute();
-		
+
 		return null;
 	}
 
 	@Override
-	public void AddEmployee(Employee e)
-			 {
-
-		// TODO Auto-generated method stub
+	public void AddEmployee(Employee e) throws ClassNotFoundException, SQLException {
 
 		Class.forName(driver);
 		Connection dbConnection;
 		dbConnection = (Connection) DriverManager.getConnection(url);
-		String query = "insert into Employee (name)" + " values (?)";
+		String query = "insert into Employee(Name,KIN)" + " values (?,?)";
 		PreparedStatement preparedStmt = dbConnection.prepareStatement(query);
 		preparedStmt.setString(1, e.getName());
+		preparedStmt.setInt(2, e.getKin_Id());
 		preparedStmt.execute();
 
 	}

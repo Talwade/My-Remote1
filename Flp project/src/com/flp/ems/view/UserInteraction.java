@@ -1,5 +1,6 @@
 package com.flp.ems.view;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class UserInteraction {
 	
 	static EmployeeServiceImpl emp = new EmployeeServiceImpl();
 
-	public void AddEmployee() {
+	public void AddEmployee() throws ClassNotFoundException, SQLException {
 
 		// loop while user not entering no
 		// do {
@@ -141,17 +142,23 @@ public class UserInteraction {
 			validdob(Dateofbirth);
 			showmap();
 			// continue;
-		} else if (answer.contains("n") || answer.equals("N")) {
+		} else
+			try {
+				if (answer.contains("n") || answer.equals("N")) {
 
-			System.exit(0);
-			// break;
-		}
+					System.exit(0);
+					// break;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		emp.AddEmployee((HashMap) mapStudent);
 
 	}
 
-	private boolean validdob(String dateofbirth2) {
+	private boolean validdob(String dateofbirth2) throws ClassNotFoundException, SQLException {
 		
 		Matcher mtch = pat.matcher(dateofbirth2);
 		if (mtch.matches()) {
@@ -200,47 +207,55 @@ public class UserInteraction {
 
 	}
 
-	public Employee ModifyEmployee() {
-
-		int ch;
-		System.out.println("enter details so that system checks your record..");
-		System.out.println("enter the name");
-		name = scan.next();
-		System.out.println("enter email id");
-		emailid = scan.next();
-		System.out.println("enter kin id");
-		kids = scan.nextInt();
-
-		Employee e = emp.SearchEmployee(name, emailid, kids);
-		if (e != null) {
-
-			Map<String, Object> modify = new HashMap<String, Object>();
-			System.out.println("Modify employee");
-			System.out.println("1.Modify name \n2.Modify email");
-
-			System.out.println("enter your choice");
-			ch = scan.nextInt();
-			switch (ch) {
-			case 1:
-				System.out.println("enter new Name");
-				modify.put("Name", scan.next());
-				emp.ModifyEmployee(modify, name, emailid, kids, ch);
-				break;
-
-			case 2:
-				System.out.println("enter new Email_Id");
-				modify.put("Emailid", scan.next());
-				emp.ModifyEmployee(modify, name, emailid, kids, ch);
-				break;
-
-			}
-		}
-		 //return null;
-		return e;
-
+	public Employee ModifyEmployee() throws ClassNotFoundException, SQLException  {
 		
 
-	}
+			int ch;
+			System.out.println("enter details so that system checks your record..");
+			System.out.println("enter the name");
+			name = scan.next();
+			System.out.println("enter email id");
+			emailid = scan.next();
+			System.out.println("enter kin id");
+			kids = scan.nextInt();
+
+			Employee e = emp.SearchEmployee(name, emailid, kids);
+			if (e != null) {
+
+				Map<String, Object> modify = new HashMap<String, Object>();
+				System.out.println("Modify employee");
+				System.out.println("1.Modify name \n2.Modify email");
+
+				System.out.println("enter your choice");
+				ch = scan.nextInt();
+				try {
+					switch (ch) {
+					case 1:
+						System.out.println("enter new Name");
+						modify.put("Name", scan.next());
+						emp.ModifyEmployee(modify, name, emailid, kids, ch);
+						break;
+
+					case 2:
+						System.out.println("enter new Email_Id");
+						modify.put("Emailid", scan.next());
+						emp.ModifyEmployee(modify, name, emailid, kids, ch);
+						break;
+
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			 //return null;
+			return e;
+
+			
+
+		}
+	
+	
 
 	public boolean RemoveEmployee() {
 
@@ -257,72 +272,74 @@ public class UserInteraction {
 	 * 
 	 * return emp.SearchEmployee(empid); }
 	 */
-	public Employee SearchEmployee() {
-		System.out.println(
-				"Enter option \n 1.name only \n2.email id \n3.kinid  \n4.name & email \n5.name & kinid \n6.email and kinid \n7.name email and kinid three");
-		int opt = scan.nextInt();
-		switch (opt) {
-		case 1:
+	public Employee SearchEmployee() throws ClassNotFoundException, SQLException {
+		{
+			System.out.println(
+					"Enter option \n 1.name only \n2.email id \n3.kinid  \n4.name & email \n5.name & kinid \n6.email and kinid \n7.name email and kinid three");
+			int opt = scan.nextInt();
+			switch (opt) {
+			case 1:
 
-			System.out.println("Enter Name to be searched");
-			names = scan.next();
-			return emp.SearchEmployee(names, "*", 0);
+				System.out.println("Enter Name to be searched");
+				names = scan.next();
+				return emp.SearchEmployee(names, "*", 0);
 
-		case 2:
-			System.out.println("enter email to be searched");
-			emails = scan.next();
-			return emp.SearchEmployee("*", emails, 0);
+			case 2:
+				System.out.println("enter email to be searched");
+				emails = scan.next();
+				return emp.SearchEmployee("*", emails, 0);
 
-		case 3:
+			case 3:
 
-			System.out.println("enter kin id to be searched");
-			kids = scan.nextInt();
-			return emp.SearchEmployee("*", "*", kids);
+				System.out.println("enter kin id to be searched");
+				kids = scan.nextInt();
+				return emp.SearchEmployee("*", "*", kids);
 
-		case 4:
-			System.out.println("enter email and name to be searched");
-			System.out.println("Enter Name to be searched");
-			names = scan.next();
-			System.out.println("enter email to be searched");
-			emails = scan.next();
+			case 4:
+				System.out.println("enter email and name to be searched");
+				System.out.println("Enter Name to be searched");
+				names = scan.next();
+				System.out.println("enter email to be searched");
+				emails = scan.next();
 
-			return emp.SearchEmployee(names, emails, 0);
+				return emp.SearchEmployee(names, emails, 0);
 
-		case 5:
-			System.out.println("enter  name  and kin id to be searched");
-			System.out.println("Enter Name to be searched");
-			names = scan.next();
-			System.out.println("enter email to be searched");
-			kids = scan.nextInt();
+			case 5:
+				System.out.println("enter  name  and kin id to be searched");
+				System.out.println("Enter Name to be searched");
+				names = scan.next();
+				System.out.println("enter email to be searched");
+				kids = scan.nextInt();
 
-			return emp.SearchEmployee(names, "*", kids);
+				return emp.SearchEmployee(names, "*", kids);
 
-		case 6:
-			System.out.println("enter email and kinidto be searched");
-			System.out.println("Enter email to be searched");
-			emails = scan.next();
-			System.out.println("enter kinid to be searched");
-			kids = scan.nextInt();
+			case 6:
+				System.out.println("enter email and kinidto be searched");
+				System.out.println("Enter email to be searched");
+				emails = scan.next();
+				System.out.println("enter kinid to be searched");
+				kids = scan.nextInt();
 
-			return emp.SearchEmployee("*", emails, kids);
+				return emp.SearchEmployee("*", emails, kids);
 
-		case 7:
-			System.out.println("enter name, email id and kinid to be searched");
-			System.out.println("Enter name to be searched");
-			names = scan.next();
-			System.out.println("Enter email to be searched");
-			emails = scan.next();
-			System.out.println("enter kinid to be searched");
-			kids = scan.nextInt();
+			case 7:
+				System.out.println("enter name, email id and kinid to be searched");
+				System.out.println("Enter name to be searched");
+				names = scan.next();
+				System.out.println("Enter email to be searched");
+				emails = scan.next();
+				System.out.println("enter kinid to be searched");
+				kids = scan.nextInt();
 
-			return emp.SearchEmployee(names, emails, kids);
+				return emp.SearchEmployee(names, emails, kids);
+
+			}
+			return null;
 
 		}
-		return null;
+	} 
 
-	}
-
-	public void getAll() {
+	public void getAll() throws ClassNotFoundException, SQLException {
 		boolean val;
 		if (val = mapStudent.isEmpty()) {
 			/* System.out.println("Empty"); */

@@ -1,5 +1,6 @@
 package com.flp.ems.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +46,7 @@ public class EmployeeDaoImplForList implements IemployeeDao {
 	}
 
 	@Override
-	public void ModifyEmployee(Map empdetails, String name, String email, int kinid, int empid) {
+	public Employee ModifyEmployee(Map empdetails, String name, String email, int kinid, int empid) {
 
 		boolean flags;
 		Employee emp = SearchEmployee(name, email, kinid);
@@ -78,6 +79,7 @@ public class EmployeeDaoImplForList implements IemployeeDao {
 			employees.add(index, emp);
 			break;
 		}
+		return e;
 
 	}
 
@@ -183,6 +185,12 @@ public class EmployeeDaoImplForList implements IemployeeDao {
 		// System.out.println("Kin_id =null,Phone=null,Name: null, Email:null,
 		// DOB=null,
 		// DOJ=null,Employee_id=null,Department=null,Project=null,Role=null");
+	}
+
+	@Override
+	public boolean RemoveEmployee(int id, Employee e) throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/*
